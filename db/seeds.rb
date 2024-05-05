@@ -24,6 +24,6 @@ packages.each do |package, prices|
   package = Package.find_by!(name: package)
   prices.each do |price|
     municipality = Municipality.find_by!(name: price["municipality"].downcase)
-    UpdatePackagePrice.call(package, price["amount_cents"], municipality)
+    UpdatePackagePrice.call(package: package, amount: price["amount_cents"], municipality: municipality)
   end
 end
