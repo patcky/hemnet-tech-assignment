@@ -6,10 +6,10 @@ RSpec.describe PriceHistory do
   it "fetches price history given year and package name" do
     package = Package.create!(name: "premium")
     stockholm = Municipality.create!(name: "Stockholm")
-    UpdatePackagePrice.call(package, 200_00, stockholm, year: 2024)
+    UpdatePackagePrice.call(package: package, amount: 200_00, municipality: stockholm, year: 2024)
     uppsala = Municipality.create!(name: "Uppsala")
-    UpdatePackagePrice.call(package, 300_00, uppsala, year: 2024)
-    UpdatePackagePrice.call(package, 400_00, uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount: 300_00, municipality: uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:400_00, municipality: uppsala, year: 2024)
 
     price_history = PriceHistory.call(
       year: "2024",
@@ -24,10 +24,10 @@ RSpec.describe PriceHistory do
   it "fetches price history given year, package name and municipality" do
     package = Package.create!(name: "premium")
     stockholm = Municipality.create!(name: "Stockholm")
-    UpdatePackagePrice.call(package, 200_00, stockholm, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:200_00, municipality: stockholm, year: 2024)
     uppsala = Municipality.create!(name: "Uppsala")
-    UpdatePackagePrice.call(package, 300_00, uppsala, year: 2024)
-    UpdatePackagePrice.call(package, 400_00, uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:300_00, municipality: uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:400_00, municipality: uppsala, year: 2024)
 
     price_history = PriceHistory.call(
       year: "2024",
@@ -59,8 +59,8 @@ RSpec.describe PriceHistory do
   it "raises an error if the municipality does not exist" do
     package = Package.create!(name: "premium")
     uppsala = Municipality.create!(name: "Uppsala")
-    UpdatePackagePrice.call(package, 300_00, uppsala, year: 2024)
-    UpdatePackagePrice.call(package, 400_00, uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:300_00, municipality: uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:400_00, municipality: uppsala, year: 2024)
     expect {
       PriceHistory.call(
         year: "2024",
@@ -81,8 +81,8 @@ RSpec.describe PriceHistory do
   it "raises an error if the year is not valid" do
     package = Package.create!(name: "premium")
     uppsala = Municipality.create!(name: "Uppsala")
-    UpdatePackagePrice.call(package, 300_00, uppsala, year: 2024)
-    UpdatePackagePrice.call(package, 400_00, uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount:300_00, municipality: uppsala, year: 2024)
+    UpdatePackagePrice.call(package: package, amount: 400_00, municipality: uppsala, year: 2024)
     expect {
       PriceHistory.call(
         year: "2025",
