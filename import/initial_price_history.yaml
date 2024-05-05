@@ -1,24 +1,24 @@
 ---
 premium:
   - amount_cents: 55500
-    municipality_id: 1
+    municipality: "Stockholm"
   - amount_cents: 66600
-    municipality_id: 2
+    municipality: "Uppsala"
   - amount_cents: 77700
-    municipality_id: 3
+    municipality: "Södertälje"
   - amount_cents: 88800
-    municipality_id: 4
+    municipality: "Stockholm"
 
 plus:
   - amount_cents: 19900
-    municipality_id: 2
+    municipality: "Uppsala"
   - amount_cents: 29900
-    municipality_id: 3
+    municipality: "Stockholm"
   - amount_cents: 39900
-    municipality_id: 4
+    municipality: "Södertälje"
 
 basic:
   - amount_cents: 5000
-    municipality_id: 3
+    municipality: "Stockholm"
   - amount_cents: 10000
-    municipality_id: 4
+    municipality: "Södertälje"

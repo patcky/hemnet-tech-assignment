@@ -7,23 +7,23 @@ Price.destroy_all
 
 puts "Creating new packages"
 
-Package.insert_all(
+Package.create!(
   YAML.load_file(Rails.root.join("import/packages.yaml"))
 )
 
 puts "Creating new municipalities"
 
-Municipality.insert_all(
+Municipality.create!(
   YAML.load_file(Rails.root.join("import/municipalities.yaml"))
 )
 
-premium = Package.find_by!(name: "premium")
-plus = Package.find_by!(name: "plus")
-basic = Package.find_by!(name: "basic")
-
 puts "Creating a price history for the packages"
-prices = YAML.load_file(Rails.root.join("import/initial_price_history.yaml"))
+packages = YAML.load_file(Rails.root.join("import/initial_price_history.yaml"))
 
-premium.prices.insert_all(prices["premium"])
-plus.prices.insert_all(prices["plus"])
-basic.prices.insert_all(prices["basic"])
+packages.each do |package, prices|
+  package = Package.find_by!(name: package)
+  prices.each do |price|
+    municipality = Municipality.find_by!(name: price["municipality"].downcase)
+    UpdatePackagePrice.call(package, price["amount_cents"], municipality)
+  end
+end

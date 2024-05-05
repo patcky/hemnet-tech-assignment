@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_05_114834) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_05_133943) do
   create_table "municipalities", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_municipalities_on_name", unique: true
   end
 
   create_table "packages", force: :cascade do |t|
@@ -31,8 +32,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_05_114834) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "municipality_id", null: false
+    t.integer "year", null: false
     t.index ["municipality_id"], name: "index_prices_on_municipality_id"
     t.index ["package_id"], name: "index_prices_on_package_id"
+    t.index ["year"], name: "index_prices_on_year"
   end
 
   add_foreign_key "prices", "municipalities"

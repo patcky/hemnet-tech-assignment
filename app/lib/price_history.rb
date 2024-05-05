@@ -1,10 +1,46 @@
 # frozen_string_literal: true
 
 class PriceHistory
-  def self.call(...)
-
+  def self.call(**options)
     # Feature request 2: Pricing History
-
-    raise NotImplementedError, "Implement this to pass the assignment"
+    self.validate_options(options)
+    package = Package.find_by!(name: options[:package].downcase)
+    prices = package.prices.where(year: options[:year].to_i)
+    prices = self.filter_by_municipality(prices, options[:municipality].downcase) if options[:municipality].present?
+    return self.build_result(prices)
   end
+
+  private
+
+    def self.validate_options(options)
+      if options[:year].nil?
+        raise ArgumentError, "year is a required argument"
+      end
+      if options[:year].to_i < 1900 or options[:year].to_i > Date.today.year
+        raise ArgumentError, "year must be between 1900 and the current year"
+      end
+      if options[:package].nil?
+        raise ArgumentError, "package is a required argument"
+      end
+    end
+
+    def self.filter_by_municipality(prices, municipality)
+      municipality = Municipality.find_by!(name: municipality)
+      return prices.where(municipality: municipality)
+    end
+
+    def self.build_result(prices)
+      result = {}
+      return result if prices.empty?
+      prices.each do |price|
+        municipality = price.municipality.name.capitalize
+        if result[municipality].nil?
+          result[municipality] = [price.amount_cents]
+        else
+          result[municipality] << price.amount_cents
+        end
+      end
+      return result
+    end
+
 end

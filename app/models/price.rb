@@ -5,4 +5,5 @@ class Price < ApplicationRecord
   belongs_to :municipality, optional: false
 
   validates :amount_cents, presence: true
+  validates :year, presence: true
 end

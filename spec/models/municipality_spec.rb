@@ -22,7 +22,7 @@ RSpec.describe Municipality do
   it "destroys associated prices when destroyed" do
     municipality = Municipality.create!(name: "Göteborg")
     package = Package.create!(name: "Dunderhonung")
-    Price.create!(amount_cents: 100_00, package: package, municipality: municipality)
+    Price.create!(amount_cents: 100_00, package: package, municipality: municipality, year: 1995)
 
     expect {
       municipality.destroy
