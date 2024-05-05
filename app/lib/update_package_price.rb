@@ -6,8 +6,8 @@ class UpdatePackagePrice
     package = options[:package]
     new_price_cents = options[:amount]
     municipality = options[:municipality]
+    year = options[:year].nil? ? Date.today.year : options[:year]
     ActiveRecord::Base.transaction do
-      year = options[:year].nil? ? Date.today.year : options[:year]
       # Add a pricing history record for previous price, if package has a price and no history exists for that package
       if package.amount_cents > 0 and package.prices.empty?
         # Although this is meant to save the historical price, the price is being created with the current price's
