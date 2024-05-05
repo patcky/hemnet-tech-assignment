@@ -28,9 +28,18 @@ RSpec.describe UpdatePackagePrice do
     municipality = Municipality.create!(name: "Luleå")
 
     UpdatePackagePrice.call(package, 200_00, municipality)
-    expect(package.prices).to be_one
+    expect(package.prices.size).to eq(2)
     price = package.prices.first
     expect(price.amount_cents).to eq(100_00)
+  end
+
+  it "creates a new price history record for a package without previous prices" do
+    package = Package.create!(name: "Sommarhonung")
+    municipality = Municipality.create!(name: "Luleå")
+
+    UpdatePackagePrice.call(package, 200_00, municipality)
+    expect(package.prices.size).to eq(1)
+    expect(package.prices.first.amount_cents).to eq(200_00)
   end
 
   it "associates the price history record with the provided municipality" do
@@ -39,6 +48,22 @@ RSpec.describe UpdatePackagePrice do
 
     UpdatePackagePrice.call(package, 200_00, municipality)
     expect(package.prices.first.municipality).to eq(municipality)
+  end
+
+  it "associates the price history record with the provided year" do
+    package = Package.create!(name: "Dunderhonung")
+    municipality = Municipality.create!(name: "Luleå")
+
+    UpdatePackagePrice.call(package, 200_00, municipality, year: 1999)
+    expect(package.prices.first.year).to eq(1999)
+  end
+
+  it "defaults price year to the current year if no year is provided" do
+    package = Package.create!(name: "Dunderhonung")
+    municipality = Municipality.create!(name: "Luleå")
+
+    UpdatePackagePrice.call(package, 200_00, municipality)
+    expect(package.prices.first.year).to eq(Date.today.year)
   end
 
   it "rolls back the transaction if the price update fails" do
