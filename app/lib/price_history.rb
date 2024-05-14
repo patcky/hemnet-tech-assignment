@@ -14,6 +14,8 @@ class PriceHistory
 
     def self.validate_options(options)
       if options[:year].nil?
+        # To improve: instead of raising errors for each missing arg, we could save or log the errors somewhere
+        # that can be accessed later, so that we can fix the issues
         raise ArgumentError, "year is a required argument"
       end
       if options[:year].to_i < 1900 or options[:year].to_i > Date.today.year
@@ -25,8 +27,7 @@ class PriceHistory
     end
 
     def self.filter_by_municipality(prices, municipality)
-      municipality = Municipality.find_by!(name: municipality)
-      return prices.where(municipality: municipality)
+      return prices.join(:municipality).where(municipalities: { name: municipality })
     end
 
     def self.build_result(prices)
